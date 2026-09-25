@@ -44,23 +44,23 @@ export const RemotionRoot: React.FC = () => {
         height={1920}
         defaultProps={dark}
       />
-      {/* la pub : une minute, format vertical puis large */}
+      {/* la pub : une minute. Horizontal d'abord, vertical pour les reseaux */}
       <Composition
         id="AyokaFilm"
         component={AyokaFilm}
         durationInFrames={FILM_FRAMES}
         fps={FPS}
-        width={1080}
-        height={1920}
+        width={1920}
+        height={1080}
         defaultProps={{background: THEME.ivory, ink: THEME.ink} satisfies FilmProps}
       />
       <Composition
-        id="AyokaFilmWide"
+        id="AyokaFilmVertical"
         component={AyokaFilm}
         durationInFrames={FILM_FRAMES}
         fps={FPS}
-        width={1920}
-        height={1080}
+        width={1080}
+        height={1920}
         defaultProps={{background: THEME.ivory, ink: THEME.ink} satisfies FilmProps}
       />
       {/* banniere de site, en-tete de video */}

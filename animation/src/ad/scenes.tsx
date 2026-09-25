@@ -16,6 +16,7 @@ import {DISPLAY, LABEL} from './fonts';
 import {ChromaText} from './effects/ChromaText';
 import {FlashAt, Letterbox} from './effects/Overlays';
 import {Plate} from './Plate';
+import {useLayout} from './layout';
 
 export type SceneProps = {
   background: string;
@@ -45,7 +46,8 @@ const StillLogo: React.FC<{color: string; width: number}> = ({color, width}) => 
  */
 export const ColdOpen: React.FC<SceneProps> = ({background, ink}) => {
   const frame = useCurrentFrame();
-  const {width, durationInFrames} = useVideoConfig();
+  const {durationInFrames} = useVideoConfig();
+  const {u} = useLayout();
 
   const open = interpolate(frame, [10, 46], [0, 1], {
     extrapolateLeft: 'clamp',
@@ -73,7 +75,7 @@ export const ColdOpen: React.FC<SceneProps> = ({background, ink}) => {
         style={{
           fontFamily: LABEL,
           fontWeight: 700,
-          fontSize: width * 0.036,
+          fontSize: u * 0.036,
           letterSpacing: '0.52em',
           textIndent: '0.52em',
           textTransform: 'uppercase',
@@ -124,7 +126,8 @@ export const Burst: React.FC<SceneProps & {shots: number; every: number}> = ({
  */
 export const LogoStrike: React.FC<SceneProps> = ({background, ink}) => {
   const frame = useCurrentFrame();
-  const {fps, width, durationInFrames} = useVideoConfig();
+  const {fps, durationInFrames} = useVideoConfig();
+  const {logoWidth} = useLayout();
   const punch = spring({frame, fps, config: {damping: 11, mass: 0.5, stiffness: 170}});
   const drift = interpolate(frame, [0, durationInFrames], [0, 0.04]);
   const split = interpolate(frame, [0, 10], [26, 0], {
@@ -142,7 +145,7 @@ export const LogoStrike: React.FC<SceneProps> = ({background, ink}) => {
       }}
     >
       <div style={{filter: split > 0.5 ? `blur(${split * 0.18}px)` : undefined}}>
-        <StillLogo color={ink} width={width * 0.84} />
+        <StillLogo color={ink} width={logoWidth} />
       </div>
       <FlashAt at={0} peak={0.62} duration={6} />
     </AbsoluteFill>
@@ -189,7 +192,8 @@ const ManifestoBeat: React.FC<{
   big: boolean;
 }> = ({line, index, background, ink, big}) => {
   const frame = useCurrentFrame();
-  const {fps, width, durationInFrames} = useVideoConfig();
+  const {fps, durationInFrames} = useVideoConfig();
+  const {u} = useLayout();
 
   const rise = spring({frame, fps, config: {damping: 20, mass: 0.6, stiffness: 120}});
   const split = interpolate(frame, [0, 12], [18, 0], {
@@ -210,12 +214,12 @@ const ManifestoBeat: React.FC<{
           color="#fff"
           style={{
             fontFamily: DISPLAY,
-            fontSize: width * (big ? 0.62 : 0.17),
+            fontSize: u * (big ? 0.62 : 0.17),
             lineHeight: 0.92,
             letterSpacing: big ? '-0.02em' : '0.01em',
             textTransform: 'uppercase',
             opacity: out,
-            transform: `translateY(${(1 - rise) * width * 0.06}px)`,
+            transform: `translateY(${(1 - rise) * u * 0.06}px)`,
           }}
         >
           {line}
@@ -225,15 +229,21 @@ const ManifestoBeat: React.FC<{
   );
 };
 
-/** Mosaique : les cases tombent une par une, puis l'ensemble se resserre. */
-export const Grid: React.FC<SceneProps & {cells: number}> = ({
+/**
+ * Mosaique : les cases tombent une par une, puis l'ensemble se resserre.
+ * Le nombre de cases suit le format — une grille fixe laisse une rangee
+ * incomplete des que le cadre change de sens.
+ */
+export const Grid: React.FC<SceneProps & {rows?: number}> = ({
   background,
   ink,
   from,
-  cells,
+  rows = 2,
 }) => {
   const frame = useCurrentFrame();
   const {fps, durationInFrames} = useVideoConfig();
+  const {columns} = useLayout();
+  const cells = columns * rows;
   const close = interpolate(frame, [durationInFrames - 40, durationInFrames], [1, 1.35], {
     extrapolateLeft: 'clamp',
   });
@@ -245,7 +255,7 @@ export const Grid: React.FC<SceneProps & {cells: number}> = ({
           position: 'absolute',
           inset: 0,
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
+          gridTemplateColumns: `repeat(${columns}, 1fr)`,
           gap: 6,
         }}
       >
@@ -283,7 +293,8 @@ export const Grid: React.FC<SceneProps & {cells: number}> = ({
 /** Plan long, cadre cinema, une legende discrete. */
 export const Detail: React.FC<SceneProps> = ({background, ink, from}) => {
   const frame = useCurrentFrame();
-  const {width, durationInFrames} = useVideoConfig();
+  const {durationInFrames} = useVideoConfig();
+  const {u} = useLayout();
   const label = interpolate(frame, [20, 44], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
@@ -304,7 +315,7 @@ export const Detail: React.FC<SceneProps> = ({background, ink, from}) => {
           style={{
             fontFamily: LABEL,
             fontWeight: 500,
-            fontSize: width * 0.026,
+            fontSize: u * 0.026,
             letterSpacing: '0.46em',
             textIndent: '0.46em',
             textTransform: 'uppercase',
@@ -349,7 +360,7 @@ export const Rapid: React.FC<SceneProps & {shots: number; every: number}> = ({
 );
 
 const RapidWord: React.FC<{word: string}> = ({word}) => {
-  const {width} = useVideoConfig();
+  const {u} = useLayout();
   return (
     <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center'}}>
       <ChromaText
@@ -357,7 +368,7 @@ const RapidWord: React.FC<{word: string}> = ({word}) => {
         color="#fff"
         style={{
           fontFamily: DISPLAY,
-          fontSize: width * 0.2,
+          fontSize: u * 0.2,
           textTransform: 'uppercase',
           letterSpacing: '0.01em',
         }}
@@ -379,8 +390,9 @@ export const Finale: React.FC<SceneProps> = ({background, ink}) => (
 /** Generique : le logo se retire, le nom du createur reste. */
 export const Credits: React.FC<SceneProps> = ({background, ink}) => {
   const frame = useCurrentFrame();
-  const {width, durationInFrames} = useVideoConfig();
-  const shrink = interpolate(frame, [0, 26], [0.86, 0.46], {
+  const {durationInFrames} = useVideoConfig();
+  const {u, logoWidth} = useLayout();
+  const shrink = interpolate(frame, [0, 26], [1, 0.62], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
     easing: Easing.out(Easing.cubic),
@@ -400,11 +412,11 @@ export const Credits: React.FC<SceneProps> = ({background, ink}) => {
         background,
         alignItems: 'center',
         justifyContent: 'center',
-        gap: width * 0.06,
+        gap: u * 0.06,
         opacity: fade,
       }}
     >
-      <StillLogo color={ink} width={width * shrink} />
+      <StillLogo color={ink} width={logoWidth * shrink} />
       <div
         style={{
           textAlign: 'center',
@@ -416,13 +428,13 @@ export const Credits: React.FC<SceneProps> = ({background, ink}) => {
           style={{
             fontFamily: LABEL,
             fontWeight: 500,
-            fontSize: width * 0.022,
+            fontSize: u * 0.022,
             letterSpacing: '0.42em',
             textIndent: '0.42em',
             textTransform: 'uppercase',
             color: ink,
             opacity: 0.6,
-            marginBottom: width * 0.022,
+            marginBottom: u * 0.022,
           }}
         >
           {COPY.signature}
@@ -430,13 +442,28 @@ export const Credits: React.FC<SceneProps> = ({background, ink}) => {
         <div
           style={{
             fontFamily: DISPLAY,
-            fontSize: width * 0.062,
+            fontSize: u * 0.062,
             letterSpacing: '0.04em',
             textTransform: 'uppercase',
             color: ink,
           }}
         >
           {COPY.creator}
+        </div>
+        <div
+          style={{
+            fontFamily: LABEL,
+            fontWeight: 500,
+            fontSize: u * 0.024,
+            letterSpacing: '0.3em',
+            textIndent: '0.3em',
+            textTransform: 'uppercase',
+            color: ink,
+            opacity: 0.6,
+            marginTop: u * 0.018,
+          }}
+        >
+          {COPY.forWhom}
         </div>
       </div>
     </AbsoluteFill>

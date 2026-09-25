@@ -104,7 +104,7 @@ export const AyokaFilm: React.FC<FilmProps> = ({background, ink}) => {
           timing={lap(LAPS.toGrid)}
         />
         <TransitionSeries.Sequence durationInFrames={CUTS.grid}>
-          <Grid {...dark} from={FROM.grid} cells={4} />
+          <Grid {...dark} from={FROM.grid} rows={2} />
         </TransitionSeries.Sequence>
 
         <TransitionSeries.Transition

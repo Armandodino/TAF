@@ -8,8 +8,8 @@
     "render": "remotion render AyokaSquare out/ayoka-1080.mp4",
     "render:reel": "remotion render AyokaReel out/ayoka-reel.mp4",
     "render:banner": "remotion render AyokaBanner out/ayoka-banner.mp4",
-    "render:film": "remotion render AyokaFilm out/ayoka-pub.mp4",
-    "render:film:wide": "remotion render AyokaFilmWide out/ayoka-pub-16x9.mp4",
+    "render:film": "remotion render AyokaFilm out/ayoka-pub-16x9.mp4",
+    "render:film:vertical": "remotion render AyokaFilmVertical out/ayoka-pub-9x16.mp4",
     "media": "node tools/scan-media.mjs",
     "render:gif": "remotion render AyokaSquare out/ayoka.gif --codec=gif",
     "still": "remotion still AyokaSquare out/ayoka-final.png --frame=115"

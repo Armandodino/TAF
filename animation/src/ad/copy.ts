@@ -8,6 +8,8 @@
 export const COPY = {
   brand: 'AYOKA',
   creator: 'Armando Anzan',
+  /** Pour qui le film est fait, sous le nom du createur. */
+  forWhom: 'Pour Ayoka Dimi',
   /** Sur-titre du carton d'ouverture et du generique. */
   collection: 'Collection 01',
 

@@ -15,12 +15,33 @@ npm run dev        # Remotion Studio, prévisualisation image par image
 ## Rendre
 
 ```bash
-npm run render         # AyokaSquare  1080 × 1080
-npm run render:reel    # AyokaReel    1080 × 1920
-npm run render:banner  # AyokaBanner  1920 × 1080
-npm run render:gif     # le carré, en GIF
-npm run still          # dernière image en PNG
+npm run media             # scanne public/charte et régénère la liste des plans
+npm run render:film       # la pub, 1920 × 1080, une minute
+npm run render:film:vertical  # la même en 1080 × 1920
+
+npm run render            # logo seul, 1080 × 1080
+npm run render:reel       # logo seul, 1080 × 1920
+npm run render:banner     # logo seul, 1920 × 1080
 ```
+
+## La pub
+
+Une minute, neuf scènes, format horizontal par défaut. Les plans viennent de
+`public/charte/` : dépose les images, lance `npm run media`, et le montage se
+remplit. Tant que le dossier est vide, chaque plan retombe sur un détail du
+logo agrandi — le montage tient et se regarde avant même que les photos
+arrivent.
+
+L'ordre des plans est trié tout seul : porté d'abord (c'est ce qui donne
+l'échelle et le corps), puis produit, puis accessoire. Les fichiers dont le nom
+contient `logo` sont écartés, le logo ayant déjà ses propres scènes.
+
+Les textes sont dans `src/ad/copy.ts`. `manifesto` et `beats` sont vides : sans
+eux, le film déroule le nom lettre par lettre, ce qui tient tout seul.
+
+Les tailles se calent sur le petit côté du cadre, jamais sur la largeur — une
+taille en fraction de largeur donne un texte juste en portrait et un texte qui
+déborde de la hauteur en paysage.
 
 Trois compositions, même film : carré sur fond ivoire, story et reel sur fond noir,
 bannière sur fond ivoire. La largeur du logo suit le rapport de l'image, le reste
