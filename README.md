@@ -74,12 +74,37 @@ son attache sous le crâne) :
 oreilles se déploient, les défenses poussent, la trompe se déroule), *Trompe*
 (les plis apparaissent un à un) et *Au repos*.
 
+## Utiliser dans Canva
+
+Canva aplatit les SVG à l'import : le logo y redevient un bloc unique. Ce sont donc
+les PNG qui servent de calques. `export/canva/` contient les jeux prêts à déposer,
+recadrés sur un carré serré de 1265 × 1265 px pour que le logo remplisse la page :
+
+```
+export/canva/lettres-noir/     8 calques : A, Y, O, K, A, trompe, 2 défenses
+export/canva/anatomie-noir/    6 calques : 2 oreilles, crâne, trompe, 2 défenses
+export/canva/*-blanc/          les mêmes, en blanc, pour un fond sombre
+export/canva/trompe-a-plis/    trompe pleine + ses 4 plis, à animer un à un
+export/canva/GUIDE-CANVA.md    import, alignement, chronologie, trois séquences
+```
+
+Les fichiers sont numérotés dans l'ordre d'animation et partagent tous le même cadre :
+posés à la même taille et centrés, ils s'alignent sans réglage. `GUIDE-CANVA.md`
+détaille la mise en place et trois séquences qui marchent.
+
+Pour une archive à glisser dans Canva :
+
+```bash
+cd export && zip -r ../ayoka-calques-canva.zip canva
+```
+
 ## Régénérer
 
 ```bash
 pip install pillow numpy scipy potracer
 python3 tools/split_logo.py    # découpe et exporte PNG + SVG
 python3 tools/build_demo.py    # reconstruit la page de prévisualisation
+python3 tools/export_canva.py  # prépare les jeux de calques pour Canva
 ```
 
 ## Notes de découpe
