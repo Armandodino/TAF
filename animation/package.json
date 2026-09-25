@@ -5,10 +5,11 @@
   "description": "Animations de marque du logo AYOKA, en Remotion",
   "scripts": {
     "dev": "remotion studio",
-    "render": "remotion render AyokaReveal out/ayoka-1080.mp4",
+    "render": "remotion render AyokaSquare out/ayoka-1080.mp4",
     "render:reel": "remotion render AyokaReel out/ayoka-reel.mp4",
-    "render:gif": "remotion render AyokaReveal out/ayoka.gif --codec=gif",
-    "still": "remotion still AyokaReveal out/ayoka-final.png --frame=170"
+    "render:banner": "remotion render AyokaBanner out/ayoka-banner.mp4",
+    "render:gif": "remotion render AyokaSquare out/ayoka.gif --codec=gif",
+    "still": "remotion still AyokaSquare out/ayoka-final.png --frame=115"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.0",

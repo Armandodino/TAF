@@ -1,5 +1,5 @@
 import React from 'react';
-import {CANVAS, LOGO_BOX, ORDER, PIECES, type PieceName} from './paths';
+import {LOGO_BOX, ORDER, PIECES, type PieceName} from './paths';
 
 /** Marge autour du logo dans le cadrage, en unites de toile. */
 const PAD = 14;
@@ -14,87 +14,110 @@ export const VIEW_BOX = {
 
 export const ASPECT = VIEW_BOX.width / VIEW_BOX.height;
 
-/** Etat d'une piece a une image donnee. */
-export type PieceState = {
-  /** Progression du volet, de 0 (piece cachee) a 1 (piece entiere). */
-  reveal: number;
-  /** Bord d'ou le volet s'ouvre. */
-  from: 'top' | 'bottom';
-  /** Decalage vertical, en unites de toile. */
-  dy?: number;
-  /** Rotation en degres, autour du pivot naturel de la piece. */
-  rotate?: number;
+/** Etat d'une piece a une image donnee, en unites de toile. */
+export type PieceTransform = {
+  x: number;
+  y: number;
+  rotate: number;
+  /** Ecart-type du flou, par axe. Se deduit de la vitesse de la piece. */
+  blurX: number;
+  blurY: number;
 };
 
-export type LogoStates = Record<PieceName, PieceState>;
+export type LogoTransforms = Record<PieceName, PieceTransform>;
 
-/**
- * Debord du volet, de tous les cotes.
- *
- * Sans lui, le volet grand ouvert s'arrete pile sur la boite de la piece et
- * tranche ses bords anticrenelis : deux pieces mitoyennes laissent alors
- * paraitre un fil de fond entre elles, par exemple sous le O, la ou commence
- * la trompe. Avec le debord, un volet entierement ouvert ne touche plus a la
- * forme.
- */
-const BLEED = 6;
+/** En dessous, le flou ne se voit pas et coute un filtre pour rien. */
+const BLUR_FLOOR = 0.4;
 
-const Shutter: React.FC<{name: PieceName; state: PieceState}> = ({
-  name,
-  state,
-}) => {
-  const [x0, y0, x1, y1] = PIECES[name].bbox;
-  const top = y0 - BLEED;
-  const bottom = y1 + BLEED;
-  const open = Math.max(0, Math.min(1, state.reveal)) * (bottom - top);
+export const LogoLayers: React.FC<{
+  transforms: LogoTransforms;
+  color: string;
+  /** Identifiant unique : les defs SVG sont globales au document. */
+  uid: string;
+  /** Avancee du balayage de lumiere, de 0 a 1. Hors [0,1], pas de balayage. */
+  sheen?: number;
+}> = ({transforms, color, uid, sheen = -1}) => {
+  const blurred = ORDER.filter(
+    (n) => transforms[n].blurX > BLUR_FLOOR || transforms[n].blurY > BLUR_FLOOR,
+  );
+  const sweeping = sheen >= 0 && sheen <= 1;
+
+  // le balayage part d'avant le bord gauche et sort par la droite
+  const sheenWidth = VIEW_BOX.width * 0.3;
+  const sheenX =
+    VIEW_BOX.x - sheenWidth + sheen * (VIEW_BOX.width + sheenWidth * 2);
+  const cx = VIEW_BOX.x + VIEW_BOX.width / 2;
+  const cy = VIEW_BOX.y + VIEW_BOX.height / 2;
 
   return (
-    <rect
-      x={x0 - BLEED}
-      width={x1 - x0 + BLEED * 2}
-      y={state.from === 'bottom' ? bottom - open : top}
-      height={open}
-    />
-  );
-};
+    <svg
+      viewBox={`${VIEW_BOX.x} ${VIEW_BOX.y} ${VIEW_BOX.width} ${VIEW_BOX.height}`}
+      style={{width: '100%', height: '100%', display: 'block', overflow: 'visible'}}
+    >
+      <defs>
+        {blurred.map((name) => (
+          <filter
+            key={name}
+            id={`${uid}-blur-${name}`}
+            // le flou deborde largement : sans marge, le filtre rabote la trainee
+            x="-70%"
+            y="-70%"
+            width="240%"
+            height="240%"
+            colorInterpolationFilters="sRGB"
+          >
+            <feGaussianBlur
+              stdDeviation={`${transforms[name].blurX} ${transforms[name].blurY}`}
+            />
+          </filter>
+        ))}
 
-/**
- * Le logo, chaque piece dans son propre volet.
- *
- * Le volet est fixe dans l'espace de la toile et la piece glisse derriere :
- * la forme se decouvre a sa place finale au lieu d'arriver en bloc.
- */
-export const LogoLayers: React.FC<{
-  states: LogoStates;
-  color: string;
-  /** Identifiant unique, les clipPath etant globaux au document. */
-  uid: string;
-}> = ({states, color, uid}) => (
-  <svg
-    viewBox={`${VIEW_BOX.x} ${VIEW_BOX.y} ${VIEW_BOX.width} ${VIEW_BOX.height}`}
-    style={{width: '100%', height: '100%', display: 'block', overflow: 'visible'}}
-  >
-    <defs>
-      {ORDER.map((name) => (
-        <clipPath key={name} id={`${uid}-${name}`}>
-          <Shutter name={name} state={states[name]} />
-        </clipPath>
-      ))}
-    </defs>
+        {sweeping ? (
+          <>
+            <clipPath id={`${uid}-silhouette`}>
+              {ORDER.map((name) => (
+                <path key={name} d={PIECES[name].d} clipRule="evenodd" />
+              ))}
+            </clipPath>
+            <linearGradient id={`${uid}-sheen`} x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#fff" stopOpacity="0" />
+              <stop offset="50%" stopColor="#fff" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+            </linearGradient>
+          </>
+        ) : null}
+      </defs>
 
-    {ORDER.map((name) => {
-      const {dy = 0, rotate = 0} = states[name];
-      const [px, py] = PIECES[name].pivot;
-      return (
-        <g key={name} clipPath={`url(#${uid}-${name})`}>
-          <g transform={`translate(0 ${dy}) rotate(${rotate} ${px} ${py})`}>
+      {ORDER.map((name) => {
+        const t = transforms[name];
+        const [px, py] = PIECES[name].pivot;
+        const filter =
+          t.blurX > BLUR_FLOOR || t.blurY > BLUR_FLOOR
+            ? `url(#${uid}-blur-${name})`
+            : undefined;
+        return (
+          <g
+            key={name}
+            filter={filter}
+            transform={`translate(${t.x} ${t.y}) rotate(${t.rotate} ${px} ${py})`}
+          >
             <path d={PIECES[name].d} fill={color} fillRule="evenodd" />
           </g>
-        </g>
-      );
-    })}
-  </svg>
-);
+        );
+      })}
 
-export {LOGO_BOX, CANVAS, ORDER, PIECES};
-export type {PieceName};
+      {sweeping ? (
+        <g clipPath={`url(#${uid}-silhouette)`}>
+          <rect
+            x={sheenX}
+            y={VIEW_BOX.y - VIEW_BOX.height}
+            width={sheenWidth}
+            height={VIEW_BOX.height * 3}
+            fill={`url(#${uid}-sheen)`}
+            transform={`rotate(-16 ${cx} ${cy})`}
+          />
+        </g>
+      ) : null}
+    </svg>
+  );
+};

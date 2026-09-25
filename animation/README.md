@@ -9,56 +9,65 @@ et chaque pièce garde son point de pivot.
 ```bash
 cd animation
 npm install
-npm run dev        # ouvre Remotion Studio, prévisualisation image par image
+npm run dev        # Remotion Studio, prévisualisation image par image
 ```
 
 ## Rendre
 
 ```bash
-npm run render       # AyokaReveal  1080 × 1080  → out/ayoka-1080.mp4
-npm run render:reel  # AyokaReel    1080 × 1920  → out/ayoka-reel.mp4
-npm run render:gif   # même film en GIF
-npm run still        # dernière image en PNG
+npm run render         # AyokaSquare  1080 × 1080
+npm run render:reel    # AyokaReel    1080 × 1920
+npm run render:banner  # AyokaBanner  1920 × 1080
+npm run render:gif     # le carré, en GIF
+npm run still          # dernière image en PNG
 ```
 
-Trois compositions, même film : `AyokaReveal` (post carré, fond ivoire),
-`AyokaReel` (story et reel, fond noir), `AyokaBanner` (1920 × 1080, bannière).
-La largeur du logo s'adapte au format, le reste est commun.
+Trois compositions, même film : carré sur fond ivoire, story et reel sur fond noir,
+bannière sur fond ivoire. La largeur du logo suit le rapport de l'image, le reste
+est commun.
 
 ## Le film
 
-5 secondes à 30 images/s.
+3,2 secondes à 30 images/s. Il n'y a pas de révélation progressive : il y a une
+course, un choc, et l'image qui encaisse.
 
-| Temps | Ce qui se passe |
+| Images | Ce qui se passe |
 |---|---|
-| 0,2 → 1,9 s | les cinq lettres se posent, dans l'ordre de lecture |
-| 1,8 → 2,6 s | les défenses descendent |
-| 2,1 → 3,2 s | la trompe se déroule |
-| 3,3 → 4,1 s | le trait se trace sous le logo |
-| tout du long | rapproché très lent, pour que l'image respire |
+| 0 → 26 | les huit pièces foncent vers le centre depuis hors-cadre, en accélérant, avec un flou qui suit leur vitesse |
+| 29 | **le choc** — la dernière pièce se cale : éclair, secousse de caméra, le logo passe sous sa taille puis revient |
+| 44 → 58 | un éclat balaye le logo |
+| jusqu'à la fin | rapproché très lent, logo net |
 
-Chaque pièce se découvre derrière un **volet** fixé à sa place définitive, pendant
-qu'elle glisse vers cette place. La forme se dévoile donc là où elle doit finir, au
-lieu d'arriver en bloc — c'est ce qui donne le mouvement « imprimé » plutôt que
-« diaporama ».
+Trois détails font le gros du travail :
+
+- **Le flou suit la vitesse réelle.** La position de chaque pièce est dérivée d'une
+  image à l'autre, et l'écart devient l'écart-type d'un flou gaussien par axe. Une
+  pièce lancée horizontalement s'étire horizontalement.
+- **Les pièces arrivent quasi ensemble**, décalées de 1,6 image seulement. Assez peu
+  pour être perçu comme un seul coup, assez pour qu'on lise l'assemblage. Le crâne
+  ouvre, la trompe ferme.
+- **Les distances d'entrée sont calculées depuis le bord du cadre**, pas écrites en
+  dur. Une valeur fixe assez grande pour le format portrait laisserait le carré vide
+  une demi-seconde ; l'inverse ferait démarrer les pièces déjà à l'écran.
 
 ## Régler
 
-- **`src/theme.ts`** — couleurs et minutage. Tout le rythme est dans `BEATS`, en
-  images : décaler `letterStagger` change la cadence des lettres, `trunkDuration`
-  la lenteur de la trompe.
+- **`src/theme.ts`** — couleurs et minutage, tout en images. `impact` déplace le
+  choc, `stagger` resserre ou étale l'assemblage, `flashDuration` la durée de
+  l'éclair.
+- **`src/AyokaImpact.tsx`** — `FLIGHT` dit par où arrive chaque pièce (une
+  direction, pas une distance), sa rotation d'entrée et son rang dans
+  l'assemblage. `BLUR_GAIN` et `BLUR_CEILING` dosent la traînée.
 - **`src/Root.tsx`** — formats, couleurs par composition, et la ligne `tagline`
-  sous le logo (vide par défaut : le film finit sur le logo seul).
-- **`src/AyokaReveal.tsx`** — la chorégraphie : quelle pièce part d'où, avec quel
-  glissement et quelle bascule d'entrée.
-- **`src/logo/LogoLayers.tsx`** — le rendu des volets.
+  sous le logo. Vide par défaut : le film finit sur le logo seul.
+- **`src/logo/LogoLayers.tsx`** — rendu des pièces, filtres de flou et éclat.
 
 Pour une tagline :
 
 ```tsx
-const light: AyokaRevealProps = {
-  background: THEME.ivory,
-  ink: THEME.ink,
+const dark: AyokaImpactProps = {
+  background: THEME.ink,
+  ink: THEME.ivory,
   tagline: 'Fait à Paris',   // capitales, lettrage espacé
 };
 ```
@@ -78,9 +87,9 @@ plus les quatre plis séparés, si tu veux les faire apparaître un à un.
 
 ## Note de rendu
 
-Remotion télécharge son propre Chrome au premier rendu. Si une installation de
-Chrome traîne déjà et pose problème, passe le binaire explicitement :
+Remotion télécharge son propre Chrome au premier rendu. Si une installation gêne,
+passe le binaire explicitement :
 
 ```bash
-npx remotion render AyokaReveal out/ayoka.mp4 --browser-executable=/chemin/vers/chrome
+npx remotion render AyokaSquare out/ayoka.mp4 --browser-executable=/chemin/vers/chrome
 ```

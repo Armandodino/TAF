@@ -109,9 +109,10 @@ npm run dev      # Remotion Studio
 npm run render   # 1080 × 1080 → out/ayoka-1080.mp4
 ```
 
-Trois formats du même film de 5 s — carré, story, bannière. Les lettres se posent
-dans l'ordre de lecture, les défenses descendent, la trompe se déroule. Le rythme
-se règle dans `animation/src/theme.ts`. Détails dans `animation/README.md`.
+Trois formats du même film de 3,2 s — carré, story, bannière. Les huit pièces
+foncent vers le centre depuis hors-cadre, avec un flou calé sur leur vitesse, et
+claquent ensemble : éclair, secousse, le logo encaisse puis se pose. Le rythme se
+règle dans `animation/src/theme.ts`. Détails dans `animation/README.md`.
 
 ## Régénérer
 

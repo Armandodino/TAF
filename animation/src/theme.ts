@@ -1,33 +1,36 @@
-/** Palette et rythme de l'animation, partages par les compositions. */
+/** Palette et minutage du film. */
 
 export const THEME = {
   ivory: '#F2EFE9',
-  ink: '#111111',
+  ink: '#0B0B0B',
 } as const;
 
 export const FPS = 30;
 
 /**
- * Minutage, en images. Le logo se construit dans l'ordre ou l'oeil le lit :
- * le mot d'abord, puis ce qui fait l'elephant.
+ * Minutage, en images. Tout se joue autour de IMPACT : les pieces convergent
+ * en accelerant, se percutent sur une seule image, puis l'image encaisse.
  */
 export const BEATS = {
-  letterStart: 6,
-  letterStagger: 7,
-  letterDuration: 22,
+  /** Debut du vol des pieces. */
+  flightStart: 0,
+  /** Image ou tout se cale. C'est le battement du film. */
+  impact: 26,
+  /** Micro-decalage entre pieces, en images. Assez court pour rester percu
+   *  comme simultane, assez large pour qu'on lise l'assemblage. */
+  stagger: 1.6,
 
-  tuskStart: 54,
-  tuskStagger: 5,
-  tuskDuration: 20,
+  /** Eclair d'impact. */
+  flashDuration: 4,
+  /** Secousse de camera. */
+  shakeDuration: 10,
 
-  trunkStart: 64,
-  trunkDuration: 32,
+  /** Balayage de lumiere sur le logo. */
+  sheenStart: 44,
+  sheenDuration: 14,
 
-  ruleStart: 98,
-  ruleDuration: 26,
-
-  taglineStart: 114,
-  taglineDuration: 22,
+  taglineStart: 42,
+  taglineDuration: 18,
 } as const;
 
-export const TOTAL_FRAMES = 150;
+export const TOTAL_FRAMES = 95;

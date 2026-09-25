@@ -1,6 +1,6 @@
 import React from 'react';
 import {Composition} from 'remotion';
-import {AyokaReveal, type AyokaRevealProps} from './AyokaReveal';
+import {AyokaImpact, type AyokaImpactProps} from './AyokaImpact';
 import {FPS, THEME, TOTAL_FRAMES} from './theme';
 
 /**
@@ -9,17 +9,17 @@ import {FPS, THEME, TOTAL_FRAMES} from './theme';
  */
 export const RemotionRoot: React.FC = () => {
   const common = {
-    component: AyokaReveal,
+    component: AyokaImpact,
     durationInFrames: TOTAL_FRAMES,
     fps: FPS,
   } as const;
 
-  const light: AyokaRevealProps = {
+  const light: AyokaImpactProps = {
     background: THEME.ivory,
     ink: THEME.ink,
     tagline: '',
   };
-  const dark: AyokaRevealProps = {
+  const dark: AyokaImpactProps = {
     background: THEME.ink,
     ink: THEME.ivory,
     tagline: '',
@@ -30,7 +30,7 @@ export const RemotionRoot: React.FC = () => {
       {/* post carre */}
       <Composition
         {...common}
-        id="AyokaReveal"
+        id="AyokaSquare"
         width={1080}
         height={1080}
         defaultProps={light}
