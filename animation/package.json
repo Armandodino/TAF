@@ -10,7 +10,7 @@
     "render:banner": "remotion render AyokaBanner out/ayoka-banner.mp4",
     "render:film": "remotion render AyokaFilm out/ayoka-pub-16x9.mp4",
     "render:film:vertical": "remotion render AyokaFilmVertical out/ayoka-pub-9x16.mp4",
-    "media": "node tools/scan-media.mjs",
+    "products": "python3 ../tools/cutout_products.py && python3 ../tools/scan_products.py",
     "render:gif": "remotion render AyokaSquare out/ayoka.gif --codec=gif",
     "still": "remotion still AyokaSquare out/ayoka-final.png --frame=115"
   },

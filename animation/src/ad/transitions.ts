@@ -131,3 +131,72 @@ export const sliceGlitch = (count = 9): TransitionPresentation<SliceProps> => ({
   component: SliceGlitch,
   props: {count},
 });
+
+/**
+ * Bascule : le cadre se retourne comme une carte. La perspective est portee
+ * par un parent fixe, sinon chaque moitie fuit vers son propre point de
+ * fuite et la charniere se voit.
+ */
+const Flip3D: React.FC<TransitionPresentationComponentProps<{}>> = ({
+  children,
+  presentationProgress: p,
+  presentationDirection,
+}) => {
+  const leaving = presentationDirection === 'exiting';
+  const angle = leaving ? -p * 90 : 90 - p * 90;
+  const shade = leaving ? p : 1 - p;
+  return React.createElement(
+    AbsoluteFill,
+    {style: {perspective: '2000px', backgroundColor: '#000'}},
+    React.createElement(
+      AbsoluteFill,
+      {
+        style: {
+          transform: `rotateY(${angle}deg)`,
+          backfaceVisibility: 'hidden' as const,
+        },
+      },
+      children,
+      React.createElement(AbsoluteFill, {
+        style: {background: '#000', opacity: shade * 0.8},
+      }),
+    ),
+  );
+};
+
+export const flip3D = (): TransitionPresentation<{}> => ({
+  component: Flip3D,
+  props: {},
+});
+
+/** Ouverture en iris : le plan entrant perce l'image par un disque. */
+const IrisWipe: React.FC<TransitionPresentationComponentProps<{}>> = ({
+  children,
+  presentationProgress: p,
+  presentationDirection,
+}) => {
+  const leaving = presentationDirection === 'exiting';
+  if (leaving) {
+    return React.createElement(
+      AbsoluteFill,
+      {style: {transform: `scale(${1 - p * 0.08})`}},
+      children,
+    );
+  }
+  const radius = interpolate(p, [0, 1], [0, 78]);
+  return React.createElement(
+    AbsoluteFill,
+    {
+      style: {
+        clipPath: `circle(${radius}% at 50% 50%)`,
+        transform: `scale(${interpolate(p, [0, 1], [1.18, 1])})`,
+      },
+    },
+    children,
+  );
+};
+
+export const irisWipe = (): TransitionPresentation<{}> => ({
+  component: IrisWipe,
+  props: {},
+});

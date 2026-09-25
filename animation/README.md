@@ -15,7 +15,7 @@ npm run dev        # Remotion Studio, prévisualisation image par image
 ## Rendre
 
 ```bash
-npm run media             # scanne public/charte et régénère la liste des plans
+npm run products          # détoure les packshots et régénère le manifeste
 npm run render:film       # la pub, 1920 × 1080, une minute
 npm run render:film:vertical  # la même en 1080 × 1920
 
@@ -26,50 +26,45 @@ npm run render:banner     # logo seul, 1920 × 1080
 
 ## La pub
 
-Une minute, neuf scènes, format horizontal par défaut. Les plans viennent de
-`public/charte/` : dépose les images, lance `npm run media`, et le montage se
-remplit. Tant que le dossier est vide, chaque plan retombe sur un détail du
-logo agrandi — le montage tient et se regarde avant même que les photos
-arrivent.
+Une minute, neuf scènes, format horizontal par défaut. **Le film ne montre que
+les produits ; le logo n'entre qu'à la fin**, en assemblage, suivi du générique.
 
-L'ordre des plans est trié tout seul : porté d'abord (c'est ce qui donne
-l'échelle et le corps), puis produit, puis accessoire. Les fichiers dont le nom
-contient `logo` sont écartés, le logo ayant déjà ses propres scènes.
-
-Les textes sont dans `src/ad/copy.ts`. `manifesto` et `beats` sont vides : sans
-eux, le film déroule le nom lettre par lettre, ce qui tient tout seul.
-
-Les tailles se calent sur le petit côté du cadre, jamais sur la largeur — une
-taille en fraction de largeur donne un texte juste en portrait et un texte qui
-déborde de la hauteur en paysage.
-
-Trois compositions, même film : carré sur fond ivoire, story et reel sur fond noir,
-bannière sur fond ivoire. La largeur du logo suit le rapport de l'image, le reste
-est commun.
-
-## Le film
-
-3,2 secondes à 30 images/s. Il n'y a pas de révélation progressive : il y a une
-course, un choc, et l'image qui encaisse.
-
-| Images | Ce qui se passe |
+| Temps | Scène |
 |---|---|
-| 0 → 26 | les huit pièces foncent vers le centre depuis hors-cadre, en accélérant, avec un flou qui suit leur vitesse |
-| 29 | **le choc** — la dernière pièce se cale : éclair, secousse de caméra, le logo passe sous sa taille puis revient |
-| 44 → 58 | un éclat balaye le logo |
-| jusqu'à la fin | rapproché très lent, logo net |
+| 0–4 s | une pièce descend dans le noir, la lumière la révèle en la balayant |
+| 4–18 s | hoodie, plein cadre, qui tourne au-dessus de son reflet |
+| 18–31 s | sweat vert, après une bascule 3D |
+| 31–42 s | t-shirt, après un filage |
+| 42–54 s | les accessoires, en duo |
+| 54–68 s | le défilé : toutes les pièces traversent le cadre |
+| 68–79 s | le mur : la collection entière, puis ruée vers l'objectif |
+| 79–91 s | **l'assemblage du logo** |
+| 91–100 % | générique |
 
-Trois détails font le gros du travail :
+Les raccords sont écrits à la main : ouverture en iris, bascule 3D, filage
+avec flou, coup de zoom, déraillement en bandes. Les fondus livrés avec
+Remotion ne se voient pas dans un montage court.
 
-- **Le flou suit la vitesse réelle.** La position de chaque pièce est dérivée d'une
-  image à l'autre, et l'écart devient l'écart-type d'un flou gaussien par axe. Une
-  pièce lancée horizontalement s'étire horizontalement.
-- **Les pièces arrivent quasi ensemble**, décalées de 1,6 image seulement. Assez peu
-  pour être perçu comme un seul coup, assez pour qu'on lise l'assemblage. Le crâne
-  ouvre, la trompe ferme.
-- **Les distances d'entrée sont calculées depuis le bord du cadre**, pas écrites en
-  dur. Une valeur fixe assez grande pour le format portrait laisserait le carré vide
-  une demi-seconde ; l'inverse ferait démarrer les pièces déjà à l'écran.
+## Les produits
+
+Les visuels de la charte sont des packshots posés sur un fond uni. Recadrés
+dans le cadre, ils se ressemblent tous et on ne voit jamais la pièce entière.
+Ils sont donc **détourés** une fois pour toutes :
+
+```bash
+npm run products     # détoure public/charte → public/produits, puis régénère le manifeste
+```
+
+`tools/cutout_products.py` repère le fond par propagation depuis les bords,
+pas par simple seuil — un seuil global percerait aussi le logo blanc imprimé
+sur un t-shirt noir. `tools/scan_products.py` en tire `src/ad/products.ts` :
+dimensions, couleur dominante, et le fond de marque qui contraste le mieux
+avec elle.
+
+Une fois libres, les pièces sont des objets : `src/ad/Product.tsx` leur donne
+une ombre portée qui épouse leur contour réel (un `drop-shadow`, pas une
+ellipse posée dessous), un reflet au sol, un balayage de lumière masqué par
+leur propre silhouette, et une rotation dans la profondeur.
 
 ## Régler
 
