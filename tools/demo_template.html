@@ -1,0 +1,310 @@
+<title>Calques AYOKA</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E8EAE6; --panel:#F7F8F5; --sunk:#DEE1DA;
+  --text:#14170F; --muted:#606A5C; --line:#CBD0C4;
+  --accent:#2F6B4F; --accent-ink:#F7F8F5; --logo:#14170F;
+  --r:10px;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"IBM Plex Sans",-apple-system,Segoe UI,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#121410; --panel:#1B1E19; --sunk:#0C0E0B;
+  --text:#E7EAE2; --muted:#98A292; --line:#2E332B;
+  --accent:#86BF9E; --accent-ink:#121410; --logo:#E7EAE2;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#121410; --panel:#1B1E19; --sunk:#0C0E0B;
+  --text:#E7EAE2; --muted:#98A292; --line:#2E332B;
+  --accent:#86BF9E; --accent-ink:#121410; --logo:#E7EAE2;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 56px}
+
+header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 20px;
+  border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:24px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,4.4vw,38px);
+  letter-spacing:-.02em;margin:0;text-wrap:balance}
+header p{margin:0;color:var(--muted);max-width:56ch;font-size:14px}
+.spec{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--muted);
+  text-align:right;white-space:nowrap}
+
+.cols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:24px;align-items:start}
+@media (max-width:880px){.cols{grid-template-columns:1fr}}
+
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:880px){.stage{position:static}}
+.board{background:var(--sunk);border-radius:6px;display:block;width:100%;
+  max-width:100%}
+.board svg{width:100%;height:100%;display:block}
+#ayoka path{fill:var(--logo);transition:fill .2s}
+.piece{transform-box:view-box;transform-origin:center}
+#ayoka path{transform-box:view-box}
+
+.scenes{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+button{font:500 13px/1 var(--body);border:1px solid var(--line);background:var(--panel);
+  color:var(--text);padding:9px 13px;border-radius:99px;cursor:pointer;transition:.15s}
+button:hover{border-color:var(--accent)}
+button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.knobs{display:grid;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.knob{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.knob label{flex:0 0 78px}
+.knob input[type=range]{flex:1;accent-color:var(--accent);min-width:0}
+.knob output{font-family:var(--mono);font-size:12px;flex:0 0 42px;text-align:right;
+  font-variant-numeric:tabular-nums}
+.switch{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.switch input{accent-color:var(--accent);width:15px;height:15px}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.panel h2{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;margin:0;padding:14px 16px 10px;color:var(--muted)}
+.rows{list-style:none;margin:0;padding:0 8px 8px}
+.row{display:grid;grid-template-columns:auto auto 1fr auto auto;align-items:center;gap:10px;
+  padding:8px 8px;border-radius:7px;cursor:pointer;transition:background .15s}
+.row:hover{background:var(--sunk)}
+.row input{accent-color:var(--accent);width:15px;height:15px;margin:0}
+.dot{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+.name{font-family:var(--mono);font-size:13px;font-weight:500}
+.role{display:block;font-size:11.5px;color:var(--muted);font-family:var(--body)}
+.glyph{font-family:var(--display);font-weight:700;font-size:17px;color:var(--muted);
+  width:1.1em;text-align:center}
+.area{font-family:var(--mono);font-size:11px;color:var(--muted);
+  font-variant-numeric:tabular-nums;text-align:right}
+.row.off .name,.row.off .glyph,.row.off .area{opacity:.4}
+.sub{font-size:12px;color:var(--muted);padding:0 16px 14px;margin:0}
+.sub code{font-family:var(--mono);font-size:11.5px}
+
+.files{margin-top:20px;border-top:1px solid var(--line);padding-top:16px;
+  display:grid;gap:8px;font-size:13px;color:var(--muted)}
+.files b{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--text)}
+.files p{margin:0}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div>
+    <h1>Calques AYOKA</h1>
+    <p>Le logo découpé en 8 pièces indépendantes, alignées sur la même toile.
+       Chaque pièce est à la fois une lettre du mot et une partie de l'éléphant.</p>
+  </div>
+  <div class="spec">1600 × 1600<br>8 calques + 4 plis</div>
+</header>
+
+<div class="cols">
+  <section class="stage">
+    <div class="board">{{SVG}}</div>
+
+    <div class="scenes" role="group" aria-label="Scénarios d'animation">
+      <button data-scene="rest" aria-pressed="true">Au repos</button>
+      <button data-scene="lettering" aria-pressed="false">Lettrage</button>
+      <button data-scene="wake" aria-pressed="false">Éveil</button>
+      <button data-scene="trunk" aria-pressed="false">Trompe</button>
+    </div>
+
+    <div class="knobs">
+      <div class="knob">
+        <label for="spread">Écartement</label>
+        <input id="spread" type="range" min="0" max="100" value="0">
+        <output id="spreadOut">0 %</output>
+      </div>
+      <label class="switch" for="tint">
+        <input id="tint" type="checkbox"> Colorer les calques
+      </label>
+    </div>
+  </section>
+
+  <aside>
+    <div class="panel">
+      <h2>Pièces</h2>
+      <ul class="rows" id="rows"></ul>
+      <p class="sub">Colonne de gauche&nbsp;: la lettre. Colonne de droite&nbsp;: l'aire
+         occupée, en pixels d'encre.</p>
+    </div>
+
+    <div class="files">
+      <p><b>export/svg/ayoka-layers.svg</b><br>Tous les calques en un fichier, groupés
+         par <code>id</code> : <code>grp-ear-left</code>, <code>grp-skull</code>,
+         <code>grp-trunk</code>…</p>
+      <p><b>export/svg/pieces/*.svg</b><br>Une pièce par fichier.</p>
+      <p><b>export/png/*.png</b><br>PNG transparents 1600 × 1600, tous calés sur la même
+         toile : superposables sans recalage.</p>
+      <p><b>export/layers.json</b><br>Boîte englobante, centroïde et point de pivot de
+         chaque pièce.</p>
+    </div>
+  </aside>
+</div>
+</div>
+
+<script>
+const DATA = {{DATA}};
+const ORDER = DATA.order;
+const P = DATA.pieces;
+const detailed = document.getElementById('grp-trunk-detailed');
+const trunkPath = document.getElementById('trunk');
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const CENTER = DATA.display.center;   // centre optique du logo dans la toile
+const SPREAD = DATA.display.spread;
+document.querySelector('.board').style.aspectRatio = DATA.display.ratio;
+
+/* ---------- panneau des pièces ---------- */
+const rows = document.getElementById('rows');
+const visible = new Set(ORDER);
+ORDER.forEach(id => {
+  const d = P[id];
+  const li = document.createElement('li');
+  li.className = 'row';
+  li.innerHTML = `
+    <input type="checkbox" id="chk-${id}" checked>
+    <span class="dot" style="background:${d.color}"></span>
+    <span><span class="name">${id}</span>
+      <span class="role">${d.role}</span></span>
+    <span class="glyph">${d.letter || '·'}</span>`;
+  const area = document.createElement('span');
+  area.className = 'area';
+  area.textContent = (d.pixels / 1000).toFixed(1) + ' k';
+  li.append(area);
+  li.querySelector('input').addEventListener('change', e => {
+    const on = e.target.checked;
+    on ? visible.add(id) : visible.delete(id);
+    li.classList.toggle('off', !on);
+    node(id).style.opacity = on ? '' : '0';
+  });
+  rows.append(li);
+});
+
+const node = id => document.getElementById(id);
+const wrap = id => node(id).closest('.piece') || node(id);
+
+/* ---------- vue éclatée ---------- */
+const spread = document.getElementById('spread');
+const spreadOut = document.getElementById('spreadOut');
+spread.addEventListener('input', () => {
+  const k = +spread.value / 100;
+  spreadOut.textContent = spread.value + ' %';
+  ORDER.forEach(id => {
+    const [cx, cy] = P[id].centroid;
+    const dx = (cx - CENTER[0]) * k * SPREAD, dy = (cy - CENTER[1]) * k * SPREAD;
+    wrap(id).setAttribute('transform', `translate(${dx.toFixed(1)} ${dy.toFixed(1)})`);
+  });
+});
+
+/* ---------- coloration ---------- */
+document.getElementById('tint').addEventListener('change', e => {
+  ORDER.forEach(id => { node(id).style.fill = e.target.checked ? P[id].color : ''; });
+});
+
+/* ---------- scénarios ---------- */
+const pivot = id => P[id].pivot.join('px ') + 'px';
+let running = [];
+
+function reset() {
+  running.forEach(a => a.cancel());
+  running = [];
+  detailed.style.display = 'none';
+  trunkPath.style.display = '';
+  ORDER.forEach(id => {
+    const n = node(id);
+    n.style.transformOrigin = pivot(id);
+    n.style.opacity = visible.has(id) ? '' : '0';
+  });
+}
+
+function play(id, frames, ms, delay = 0, ease = 'cubic-bezier(.22,.9,.3,1)') {
+  if (ORDER.includes(id) && !visible.has(id)) return;
+  const a = node(id).animate(frames, {
+    duration: REDUCED ? 1 : ms, delay: REDUCED ? 0 : delay,
+    easing: ease, fill: 'both'
+  });
+  running.push(a);
+  return a;
+}
+
+const SCENES = {
+  rest() {},
+
+  // les cinq lettres se posent dans l'ordre de lecture, puis l'éléphant se complète
+  lettering() {
+    ['A1', 'Y', 'O', 'K', 'A2'].forEach((id, i) => {
+      play(id, [
+        { opacity: 0, transform: 'translateY(-90px) rotate(-6deg)' },
+        { opacity: 1, transform: 'none' }
+      ], 620, i * 150);
+    });
+    ['tusk_L', 'tusk_R'].forEach((id, i) =>
+      play(id, [{ opacity: 0, transform: 'scaleY(.2)' },
+                { opacity: 1, transform: 'none' }], 480, 900 + i * 110));
+    play('trunk', [{ opacity: 0, transform: 'scaleY(.15)' },
+                     { opacity: 1, transform: 'none' }], 700, 1050);
+  },
+
+  // l'éléphant se révèle : crâne, oreilles qui se déploient, défenses, trompe
+  wake() {
+    play('O', [{ opacity: 0, transform: 'scale(.86)' },
+               { opacity: 1, transform: 'none' }], 520);
+    [['A1', -26], ['Y', -15], ['K', 15], ['A2', 26]].forEach(([id, deg], i) => {
+      play(id, [
+        { opacity: 0, transform: `rotate(${deg}deg) scale(.9)` },
+        { opacity: 1, transform: 'none' }
+      ], 760, 260 + i * 90);
+    });
+    ['tusk_L', 'tusk_R'].forEach((id, i) =>
+      play(id, [{ opacity: 0, transform: 'scaleY(0)' },
+                { opacity: 1, transform: 'none' }], 520, 720 + i * 90));
+    play('trunk', [{ opacity: 0, transform: 'scaleY(.1) rotate(-4deg)' },
+                     { opacity: 1, transform: 'none' }], 820, 880);
+    if (!REDUCED) {
+      const sway = node('trunk').animate([
+        { transform: 'rotate(-3.5deg)' }, { transform: 'rotate(3.5deg)' }
+      ], { duration: 2600, delay: 1750, easing: 'ease-in-out',
+           direction: 'alternate', iterations: Infinity });
+      running.push(sway);
+    }
+  },
+
+  // les plis de la trompe apparaissent un à un, puis la trompe se balance
+  trunk() {
+    trunkPath.style.display = 'none';
+    detailed.style.display = '';
+    const solid = document.getElementById('trunk_solid');
+    solid.style.transformOrigin = pivot('trunk');
+    running.push(solid.animate(
+      [{ opacity: 0, transform: 'scaleY(.12)' }, { opacity: 1, transform: 'none' }],
+      { duration: REDUCED ? 1 : 780, easing: 'cubic-bezier(.22,.9,.3,1)', fill: 'both' }));
+    [1, 2, 3, 4].forEach(i => {
+      const f = document.getElementById('fold_' + i);
+      f.style.transformOrigin = '800px ' + (810 + (i - 1) * 62) + 'px';
+      running.push(f.animate(
+        [{ opacity: 0, transform: 'scaleX(.3)' }, { opacity: 1, transform: 'none' }],
+        { duration: REDUCED ? 1 : 340, delay: REDUCED ? 0 : 760 + i * 130,
+          easing: 'ease-out', fill: 'both' }));
+    });
+    if (!REDUCED) {
+      running.push(detailed.animate([
+        { transform: 'rotate(-4deg)' }, { transform: 'rotate(4deg)' }
+      ], { duration: 2400, delay: 1500, easing: 'ease-in-out',
+           direction: 'alternate', iterations: Infinity }));
+      detailed.style.transformOrigin = pivot('trunk');
+    }
+  }
+};
+
+document.querySelectorAll('[data-scene]').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('[data-scene]').forEach(o =>
+      o.setAttribute('aria-pressed', String(o === b)));
+    reset();
+    SCENES[b.dataset.scene]();
+  });
+});
+
+reset();
+</script>

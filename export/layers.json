@@ -1,0 +1,222 @@
+{
+  "size": 1600,
+  "order": [
+    "A1",
+    "Y",
+    "O",
+    "K",
+    "A2",
+    "trunk",
+    "tusk_L",
+    "tusk_R"
+  ],
+  "groups": {
+    "ear-left": [
+      "A1",
+      "Y"
+    ],
+    "ear-right": [
+      "K",
+      "A2"
+    ],
+    "skull": [
+      "O"
+    ],
+    "trunk": [
+      "trunk"
+    ],
+    "tusk-left": [
+      "tusk_L"
+    ],
+    "tusk-right": [
+      "tusk_R"
+    ]
+  },
+  "pieces": {
+    "A1": {
+      "letter": "A",
+      "role": "oreille gauche, ext\u00e9rieur",
+      "color": "#E23B3B",
+      "pivot": [
+        527,
+        470
+      ],
+      "pixels": 67819,
+      "bbox": [
+        216,
+        436,
+        524,
+        904
+      ],
+      "centroid": [
+        381.2,
+        636.4
+      ]
+    },
+    "Y": {
+      "letter": "Y",
+      "role": "oreille gauche, int\u00e9rieur",
+      "color": "#F0A01E",
+      "pivot": [
+        709,
+        470
+      ],
+      "pixels": 45228,
+      "bbox": [
+        470,
+        440,
+        709,
+        958
+      ],
+      "centroid": [
+        587.2,
+        663.1
+      ]
+    },
+    "O": {
+      "letter": "O",
+      "role": "cr\u00e2ne / front",
+      "color": "#3278E6",
+      "pivot": [
+        801,
+        700
+      ],
+      "pixels": 55999,
+      "bbox": [
+        667,
+        436,
+        935,
+        783
+      ],
+      "centroid": [
+        801.0,
+        618.8
+      ]
+    },
+    "K": {
+      "letter": "K",
+      "role": "oreille droite, int\u00e9rieur",
+      "color": "#28B45A",
+      "pivot": [
+        897,
+        470
+      ],
+      "pixels": 54093,
+      "bbox": [
+        897,
+        440,
+        1141,
+        958
+      ],
+      "centroid": [
+        1019.2,
+        672.3
+      ]
+    },
+    "A2": {
+      "letter": "A",
+      "role": "oreille droite, ext\u00e9rieur",
+      "color": "#8CDC3C",
+      "pivot": [
+        1087,
+        470
+      ],
+      "pixels": 65478,
+      "bbox": [
+        1087,
+        436,
+        1387,
+        903
+      ],
+      "centroid": [
+        1225.2,
+        638.7
+      ]
+    },
+    "trunk": {
+      "letter": null,
+      "role": "trompe",
+      "color": "#00A0FF",
+      "pivot": [
+        830,
+        790
+      ],
+      "pixels": 55551,
+      "bbox": [
+        716,
+        783,
+        947,
+        1213
+      ],
+      "centroid": [
+        813.6,
+        980.2
+      ]
+    },
+    "tusk_L": {
+      "letter": null,
+      "role": "d\u00e9fense gauche",
+      "color": "#AA46C8",
+      "pivot": [
+        668,
+        800
+      ],
+      "pixels": 10992,
+      "bbox": [
+        630,
+        796,
+        706,
+        1081
+      ],
+      "centroid": [
+        663.3,
+        926.7
+      ]
+    },
+    "tusk_R": {
+      "letter": null,
+      "role": "d\u00e9fense droite",
+      "color": "#00BEBE",
+      "pivot": [
+        936,
+        800
+      ],
+      "pixels": 11166,
+      "bbox": [
+        897,
+        796,
+        974,
+        1081
+      ],
+      "centroid": [
+        940.3,
+        926.1
+      ]
+    },
+    "fold_1": {
+      "letter": null,
+      "pixels": 541,
+      "detail_of": "trunk"
+    },
+    "fold_2": {
+      "letter": null,
+      "pixels": 372,
+      "detail_of": "trunk"
+    },
+    "fold_3": {
+      "letter": null,
+      "pixels": 297,
+      "detail_of": "trunk"
+    },
+    "fold_4": {
+      "letter": null,
+      "pixels": 257,
+      "detail_of": "trunk"
+    },
+    "trunk_solid": {
+      "letter": null,
+      "pixels": 51876,
+      "detail_of": "trunk"
+    }
+  }
+}
