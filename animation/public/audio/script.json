@@ -1,0 +1,154 @@
+{
+ "fps": 30,
+ "duration": 65.708,
+ "frames": 1972,
+ "lines": [
+  {
+   "key": "ouverture",
+   "frame": 33,
+   "frames": 73,
+   "start": 1.1,
+   "end": 3.519
+  },
+  {
+   "key": "origine",
+   "frame": 106,
+   "frames": 105,
+   "start": 3.519,
+   "end": 7.006
+  },
+  {
+   "key": "ivoirienne",
+   "frame": 210,
+   "frames": 85,
+   "start": 7.006,
+   "end": 9.828
+  },
+  {
+   "key": "bete",
+   "frame": 295,
+   "frames": 89,
+   "start": 9.828,
+   "end": 12.787
+  },
+  {
+   "key": "racines",
+   "frame": 384,
+   "frames": 131,
+   "start": 12.787,
+   "end": 17.144
+  },
+  {
+   "key": "elephant",
+   "frame": 514,
+   "frames": 48,
+   "start": 17.144,
+   "end": 18.759
+  },
+  {
+   "key": "symbole",
+   "frame": 563,
+   "frames": 254,
+   "start": 18.759,
+   "end": 27.214
+  },
+  {
+   "key": "reunir",
+   "frame": 816,
+   "frames": 90,
+   "start": 27.214,
+   "end": 30.222
+  },
+  {
+   "key": "mot",
+   "frame": 907,
+   "frames": 33,
+   "start": 30.222,
+   "end": 31.315
+  },
+  {
+   "key": "signe",
+   "frame": 939,
+   "frames": 43,
+   "start": 31.315,
+   "end": 32.757
+  },
+  {
+   "key": "identite",
+   "frame": 983,
+   "frames": 54,
+   "start": 32.757,
+   "end": 34.545
+  },
+  {
+   "key": "naissance",
+   "frame": 1036,
+   "frames": 86,
+   "start": 34.545,
+   "end": 37.412
+  },
+  {
+   "key": "marque",
+   "frame": 1122,
+   "frames": 161,
+   "start": 37.412,
+   "end": 42.783
+  },
+  {
+   "key": "pieces",
+   "frame": 1283,
+   "frames": 50,
+   "start": 42.783,
+   "end": 44.445
+  },
+  {
+   "key": "affirme",
+   "frame": 1333,
+   "frames": 71,
+   "start": 44.445,
+   "end": 46.822
+  },
+  {
+   "key": "passe",
+   "frame": 1405,
+   "frames": 103,
+   "start": 46.822,
+   "end": 50.244
+  },
+  {
+   "key": "evolue",
+   "frame": 1507,
+   "frames": 105,
+   "start": 50.244,
+   "end": 53.746
+  },
+  {
+   "key": "rencontre",
+   "frame": 1612,
+   "frames": 125,
+   "start": 53.746,
+   "end": 57.922
+  },
+  {
+   "key": "surnous",
+   "frame": 1738,
+   "frames": 52,
+   "start": 57.922,
+   "end": 59.665
+  },
+  {
+   "key": "mouvement",
+   "frame": 1790,
+   "frames": 75,
+   "start": 59.665,
+   "end": 62.172
+  },
+  {
+   "key": "signature",
+   "frame": 1865,
+   "frames": 106,
+   "start": 62.172,
+   "end": 65.708
+  }
+ ]
+}

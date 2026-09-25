@@ -2,6 +2,7 @@ import React from 'react';
 import {Composition} from 'remotion';
 import {AyokaImpact, type AyokaImpactProps} from './AyokaImpact';
 import {AyokaFilm, FILM_FRAMES, type FilmProps} from './ad/Film';
+import {AyokaStory, FILM_FRAMES as STORY_FRAMES} from './ad/StoryFilm';
 import {FPS, THEME, TOTAL_FRAMES} from './theme';
 
 /**
@@ -44,7 +45,25 @@ export const RemotionRoot: React.FC = () => {
         height={1920}
         defaultProps={dark}
       />
-      {/* la pub : une minute. Horizontal d'abord, vertical pour les reseaux */}
+      {/* le film raconte : voix off, une scene par replique */}
+      <Composition
+        id="AyokaStory"
+        component={AyokaStory}
+        durationInFrames={STORY_FRAMES}
+        fps={FPS}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="AyokaStoryVertical"
+        component={AyokaStory}
+        durationInFrames={STORY_FRAMES}
+        fps={FPS}
+        width={1080}
+        height={1920}
+      />
+
+      {/* la pub sans voix. Horizontal d'abord, vertical pour les reseaux */}
       <Composition
         id="AyokaFilm"
         component={AyokaFilm}
