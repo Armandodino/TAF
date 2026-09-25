@@ -296,6 +296,9 @@ export const Wall: React.FC<{index: number}> = ({index}) => {
         const p = productAt(index + i);
         const col = i % columns;
         const row = Math.floor(i / columns);
+        // la derniere rangee est rarement pleine : la centrer sur sa propre
+        // largeur, sinon la grille penche visiblement vers la gauche
+        const inRow = Math.min(columns, cells - row * columns);
         const pop = spring({
           frame: frame - i * 5,
           fps,
@@ -306,9 +309,9 @@ export const Wall: React.FC<{index: number}> = ({index}) => {
             key={i}
             product={p}
             size={wide ? 0.3 : 0.24}
-            x={(col - (columns - 1) / 2) * (wide ? 0.3 : 0.32)}
+            x={(col - (inRow - 1) / 2) * (wide ? 0.3 : 0.32)}
             y={(row - (rows - 1) / 2) * 0.34}
-            rotateY={(col - (columns - 1) / 2) * 12}
+            rotateY={(col - (inRow - 1) / 2) * 12}
             shadow={0.4 * pop}
             opacity={pop}
           />
