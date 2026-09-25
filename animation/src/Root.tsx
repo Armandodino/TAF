@@ -1,6 +1,7 @@
 import React from 'react';
 import {Composition} from 'remotion';
 import {AyokaImpact, type AyokaImpactProps} from './AyokaImpact';
+import {AyokaFilm, FILM_FRAMES, type FilmProps} from './ad/Film';
 import {FPS, THEME, TOTAL_FRAMES} from './theme';
 
 /**
@@ -42,6 +43,25 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         defaultProps={dark}
+      />
+      {/* la pub : une minute, format vertical puis large */}
+      <Composition
+        id="AyokaFilm"
+        component={AyokaFilm}
+        durationInFrames={FILM_FRAMES}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{background: THEME.ivory, ink: THEME.ink} satisfies FilmProps}
+      />
+      <Composition
+        id="AyokaFilmWide"
+        component={AyokaFilm}
+        durationInFrames={FILM_FRAMES}
+        fps={FPS}
+        width={1920}
+        height={1080}
+        defaultProps={{background: THEME.ivory, ink: THEME.ink} satisfies FilmProps}
       />
       {/* banniere de site, en-tete de video */}
       <Composition
