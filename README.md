@@ -98,6 +98,21 @@ Pour une archive à glisser dans Canva :
 cd export && zip -r ../ayoka-calques-canva.zip canva
 ```
 
+## Animation (Remotion)
+
+`animation/` contient un projet [Remotion](https://remotion.dev) qui anime le logo
+à partir du **SVG**, pas des PNG : net à toute résolution, avec les vrais pivots.
+
+```bash
+cd animation && npm install
+npm run dev      # Remotion Studio
+npm run render   # 1080 × 1080 → out/ayoka-1080.mp4
+```
+
+Trois formats du même film de 5 s — carré, story, bannière. Les lettres se posent
+dans l'ordre de lecture, les défenses descendent, la trompe se déroule. Le rythme
+se règle dans `animation/src/theme.ts`. Détails dans `animation/README.md`.
+
 ## Régénérer
 
 ```bash
@@ -105,6 +120,7 @@ pip install pillow numpy scipy potracer
 python3 tools/split_logo.py    # découpe et exporte PNG + SVG
 python3 tools/build_demo.py    # reconstruit la page de prévisualisation
 python3 tools/export_canva.py  # prépare les jeux de calques pour Canva
+python3 tools/export_remotion.py  # régénère les tracés du projet Remotion
 ```
 
 ## Notes de découpe
