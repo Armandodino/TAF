@@ -57,9 +57,22 @@ export type PlateMotion = 'push' | 'pull' | 'driftLeft' | 'driftRight';
  * Tout est derive du rang, donc identique d'un rendu a l'autre.
  */
 const treatmentOf = (index: number) => {
-  const focusX = 28 + random(`fx${index}`) * 44;
-  const focusY = 24 + random(`fy${index}`) * 48;
-  const base = 1 + random(`z${index}`) * 0.22;
+  // Deux valeurs de plan en alternance. Les photos sont des produits poses au
+  // centre d'un fond uni : tout jouer a la meme distance donne trente plans
+  // qui se ressemblent. Le plan serre va chercher la matiere et le logo
+  // imprime, le plan large montre la piece entiere ; c'est l'alternance des
+  // deux qui fait un montage plutot qu'un catalogue.
+  const tight = random(`t${index}`) < 0.4;
+  const focusX = tight
+    ? 43 + random(`fx${index}`) * 14
+    : 34 + random(`fx${index}`) * 32;
+  const focusY = tight
+    ? 36 + random(`fy${index}`) * 20
+    : 30 + random(`fy${index}`) * 36;
+  const base = tight
+    ? 2.05 + random(`z${index}`) * 0.75
+    : 1 + random(`z${index}`) * 0.18;
+
   // un plan sur trois passe en noir et blanc : le montage respire et la
   // reprise d'une meme image se lit comme un autre plan
   const mono = random(`m${index}`) < 0.34;
@@ -67,8 +80,8 @@ const treatmentOf = (index: number) => {
     objectPosition: `${focusX.toFixed(1)}% ${focusY.toFixed(1)}%`,
     base,
     filter: mono
-      ? 'grayscale(1) contrast(1.18) brightness(1.02)'
-      : 'saturate(1.06) contrast(1.06)',
+      ? 'grayscale(1) contrast(1.2) brightness(1.02)'
+      : 'saturate(1.08) contrast(1.08)',
   };
 };
 

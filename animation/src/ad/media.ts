@@ -3,7 +3,11 @@
 // L'ordre est celui du montage : porte d'abord, puis produit, puis accessoire.
 
 export const PHOTOS: readonly string[] = [
-
+  'charte/ayoka_hoodie_orange.webp',
+  'charte/ayoka_sweatshirt_vert.webp',
+  'charte/ayoka_tshirt_noir.webp',
+  'charte/ayoka_buckethat_noir.webp',
+  'charte/ayoka_casquette_noire.webp',
 ];
 
 export const HAS_PHOTOS = PHOTOS.length > 0;

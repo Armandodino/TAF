@@ -86,14 +86,13 @@ const SliceGlitch: React.FC<TransitionPresentationComponentProps<SliceProps>> = 
   const bands = Array.from({length: count}, (_, i) => {
     const dir = i % 2 === 0 ? 1 : -1;
     const spread = (0.35 + ((i * 37) % 100) / 140) * dir;
-    const top = (i / count) * 100;
     return React.createElement(
       'div',
       {
         key: i,
         style: {
           position: 'absolute' as const,
-          top: `${top}%`,
+          top: `${(i / count) * 100}%`,
           left: 0,
           right: 0,
           height: `${100 / count + 0.4}%`,
@@ -101,12 +100,17 @@ const SliceGlitch: React.FC<TransitionPresentationComponentProps<SliceProps>> = 
           transform: `translateX(${force * spread * 60}%)`,
         },
       },
+      // L'interieur porte l'image entiere, remontee pour que la bande n'en
+      // laisse voir que sa tranche. Le decalage se compte en hauteurs de
+      // bande, pas en pourcentage d'ecran : le parent ici est la bande, et
+      // un pourcentage d'ecran y vaut count fois moins — l'image se repetait
+      // alors en escalier au lieu d'etre tranchee.
       React.createElement(
         'div',
         {
           style: {
             position: 'absolute' as const,
-            top: `${-top}%`,
+            top: `${-i * 100}%`,
             left: 0,
             right: 0,
             height: `${count * 100}%`,
